@@ -1,0 +1,75 @@
+﻿@model List<PrespaEvents.Web.Models.Domain.Event>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .card-text {
+        max-height: 6rem; /* Ограничете ја висината на текстот на 6 реда */
+        overflow: hidden;
+    }
+
+    .card-text.expandable {
+        max-height: none; /* Кога ќе се прошири, нема ограничување на висината */
+    }
+
+    .card-text.expandable p {
+        margin: 0; /* Избегнете додавање на маргини на параграфите во проширениот текст */
+    }
+    
+
+    .card {
+        width: 18rem;
+        height: 30rem;
+    }
+
+    .card-footer {
+        display: inline-block;
+        flex-direction: row;
+    }
+</style>
+
+
+
+<div class="container">
+    <div class="m-3">
+        <a class="btn btn-success" asp-controller="Events" asp-action="Create">Add new Event</a>
+    </div>
+
+    @for (int i = 0; i < Model.Count; i++)
+    {
+        var item = Model[i];
+
+        if (i % 3 == 0)
+        {
+            @:<div class="row">
+            }
+
+            <div class="col-md-3 m-4">
+                <div class="card">
+                    <img class="card-img-top" src="@item.EventImage" style="height:30%" alt="Image for event!" />
+                    <div class="card-body">
+                        <h5 class="card-title">@item.EventName</h5>
+                        <p class="card-text">@item.EventDescription</p>
+
+                        <p><i>Price: </i><b>@item.EventPrice Den</b></p>
+                    </div>
+
+                    <div class="card-footer">
+                        <a asp-controller="Events" asp-action="AddEventToCard" asp-route-id="@item.Id" class="btn btn-info">Add to Card</a>
+                        <a asp-controller="Events" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary">Edit</a>
+
+                    </div>
+                </div>
+            </div>
+
+            if (i % 3 == 2)
+            {
+            @:</div>
+        }
+
+    }
+
+</div>

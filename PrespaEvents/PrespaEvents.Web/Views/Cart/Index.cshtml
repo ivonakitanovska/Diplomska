@@ -1,0 +1,50 @@
+﻿@model PrespaEvents.Web.Models.DTO.CartDto
+<div class="container">
+
+    <div class="row m-5">
+        <td><a asp-action="OrderNow" class="btn btn-success">Order Now</a></td>
+    </div>
+
+
+    <div class="m-5">
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Event Name</th>
+                    <th scope="col">Event Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total Sum</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.EventInCarts.Count; i++)
+                {
+                    var item = Model.EventInCarts[i];
+
+                    <tr>
+                        <th scope="row">@(i+1)</th>
+                        <td>@item.Event.EventName</td>
+                        <td>@item.Event.EventPrice</td>
+                        <td>@item.Quantity</td>
+                        <td>@(item.Event.EventPrice * item.Quantity)</td>
+                        <td><a asp-route-eventId="@item.Event.Id" asp-action="DeleteEventFromCart" class="btn btn-danger">Delete</a></td>
+                    </tr>
+                }
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <th scope="col">Total Price:</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col">@Model.TotalPrice Den</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+</div>

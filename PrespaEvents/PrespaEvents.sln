@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.34031.81
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PrespaEvents", "PrespaEvents", "{C2F4A08C-015F-40ED-A506-9A655FFC81BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrespaEvents.Web", "PrespaEvents.Web\PrespaEvents.Web.csproj", "{EE9C327B-964E-4884-98C1-664012A1F66A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EE9C327B-964E-4884-98C1-664012A1F66A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE9C327B-964E-4884-98C1-664012A1F66A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE9C327B-964E-4884-98C1-664012A1F66A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE9C327B-964E-4884-98C1-664012A1F66A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EE9C327B-964E-4884-98C1-664012A1F66A} = {C2F4A08C-015F-40ED-A506-9A655FFC81BB}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0FA2E534-59FC-4357-8752-F6343FDB5346}
+	EndGlobalSection
+EndGlobal
