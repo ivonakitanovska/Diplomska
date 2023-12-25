@@ -6,6 +6,7 @@ using PrespaEvents.Web.Data;
 using PrespaEvents.Web.Models.Domain;
 using PrespaEvents.Web.Models.DTO;
 using PrespaEvents.Web.Models.Identity;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace PrespaEvents.Web.Controllers
             _context = context;
             _userMenager = userMenager;
         }
-
+   
         public async Task<IActionResult> Index()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -89,52 +90,134 @@ namespace PrespaEvents.Web.Controllers
             return RedirectToAction("Index", "Cart");
         }
 
-        public async Task<IActionResult> OrderNow()
+        public async Task<Boolean> OrderNow()
         {
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var loggedInUser = await _context.Users
+            if (!string.IsNullOrEmpty(userId))
+            {
+                var loggedInUser = await _context.Users
                .Where(z => z.Id == userId)
                .Include(z => z.UserCart)
                .Include(z => z.UserCart.EventInCarts)
                .Include("UserCart.EventInCarts.Event")
                .FirstOrDefaultAsync();
 
-            var userCart = loggedInUser.UserCart;
+                var userCart = loggedInUser.UserCart;
 
-            Order orderItem = new Order
-            {
-                Id = Guid.NewGuid(),
-                UserId = userId,
-                User = loggedInUser
-            };
-
-            _context.Add(orderItem);
-
-            List<EventInOrder> eventInOrders = new List<EventInOrder>();
-
-            eventInOrders = userCart.EventInCarts
-                .Select(z => new EventInOrder
+                Order orderItem = new Order
                 {
-                    OrderId = orderItem.Id,
-                    EventId = z.Event.Id,
-                    SelectedEvent = z.Event,
-                    UserOrder = orderItem
-                }).ToList();
+                    Id = Guid.NewGuid(),
+                    UserId = userId,
+                    User = loggedInUser
+                };
 
-            foreach (var item in eventInOrders)
+                _context.Add(orderItem);
+
+                List<EventInOrder> eventInOrders = new List<EventInOrder>();
+
+                eventInOrders = userCart.EventInCarts
+                    .Select(z => new EventInOrder
+                    {
+                        OrderId = orderItem.Id,
+                        EventId = z.Event.Id,
+                        SelectedEvent = z.Event,
+                        UserOrder = orderItem
+                    }).ToList();
+
+                foreach (var item in eventInOrders)
+                {
+                    _context.Add(item);
+                }
+
+                loggedInUser.UserCart.EventInCarts.Clear();
+
+                _context.Update(loggedInUser);
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            else
             {
-                _context.Add(item);
+                return false;
             }
 
-            loggedInUser.UserCart.EventInCarts.Clear();
+        }
 
-            _context.Update(loggedInUser);
-            await _context.SaveChangesAsync();
+        public IActionResult PayOrder(string stripeEmail, string stripeToken)
+        {
+            var customerService = new CustomerService();
+            var chargeService = new ChargeService();
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var loggedInUser = _context.Users.Include(z => z.UserCart)
+               .Include("UserCart.EventInCarts")
+               .Include("UserCart.EventInCarts.Event")
+               .SingleOrDefault(s => s.Id == userId);
+
+            var userShoppingCart = loggedInUser.UserCart;
+
+            var AllProducts = userShoppingCart.EventInCarts.ToList();
+
+            var allProductPrice = AllProducts.Select(z => new
+            {
+                ProductPrice = z.Event.EventPrice,
+                Quanitity = z.Quantity
+            }).ToList();
+
+            var totalPrice = 0;
+
+
+            foreach (var item in allProductPrice)
+            {
+                totalPrice += item.Quanitity * item.ProductPrice;
+            }
+
+            var order = new ShoppingCartDto
+            {
+                Events = AllProducts,
+                TotalPrice = totalPrice
+            };
+
+            var customer = customerService.Create(new CustomerCreateOptions
+            {
+                Email = stripeEmail,
+                Source = stripeToken
+            });
+
+            var charge = chargeService.Create(new ChargeCreateOptions
+            {
+                Amount = (Convert.ToInt32(order.TotalPrice) * 100),
+                Description = "EShop Application Payment",
+                Currency = "usd",
+                Customer = customer.Id
+            });
+
+            if (charge.Status == "succeeded")
+            {
+                var result = this.Order();
+
+                if (result)
+                {
+                    return RedirectToAction("Index", "Cart");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Cart");
+                }
+            }
 
             return RedirectToAction("Index", "Cart");
+        }
 
+        private Boolean Order()
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var result = this.OrderNow().Result;
+
+            return result;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using PrespaEvents.Web.Constants;
 using PrespaEvents.Web.Models.Domain;
 using PrespaEvents.Web.Models.Identity;
 using System;
@@ -49,6 +50,7 @@ namespace PrespaEvents.Web.Controllers
                     var result = await userManager.CreateAsync(user, request.Password);
                     if (result.Succeeded)
                     {
+                        await userManager.AddToRoleAsync(user, Roles.User.ToString());
                         return RedirectToAction("Login");
                     }
                     else

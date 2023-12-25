@@ -9,7 +9,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PrespaEvents.Web.Data;
+using PrespaEvents.Web.Models.DTO;
 using PrespaEvents.Web.Models.Identity;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,9 +39,11 @@ namespace PrespaEvents.Web
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-           
-                // Other configurations...
-            
+            services.Configure<StripeSettings>(Configuration.GetSection("StripeSettings"));
+
+
+            // Other configurations...
+
             //services.AddDefaultIdentity<EventApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
             //    .AddEntityFrameworkStores<ApplicationDbContext>();
             services.ConfigureApplicationCookie(options =>
@@ -57,6 +61,7 @@ namespace PrespaEvents.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            StripeConfiguration.SetApiKey(Configuration.GetSection("StripeSettings")["SecretKey"]);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

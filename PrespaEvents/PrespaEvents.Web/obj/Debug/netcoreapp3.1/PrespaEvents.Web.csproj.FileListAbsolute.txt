@@ -177,3 +177,4 @@ C:\Users\Dimitar Kitanovski\Desktop\PrespaEvents\PrespaEvents\PrespaEvents.Web\o
 C:\Users\Dimitar Kitanovski\Desktop\PrespaEvents\PrespaEvents\PrespaEvents.Web\obj\Debug\netcoreapp3.1\Razor\Views\Categories\Details.cshtml.g.cs
 C:\Users\Dimitar Kitanovski\Desktop\PrespaEvents\PrespaEvents\PrespaEvents.Web\obj\Debug\netcoreapp3.1\Razor\Views\Categories\Edit.cshtml.g.cs
 C:\Users\Dimitar Kitanovski\Desktop\PrespaEvents\PrespaEvents\PrespaEvents.Web\obj\Debug\netcoreapp3.1\Razor\Views\Categories\Index.cshtml.g.cs
+C:\Users\Dimitar Kitanovski\Desktop\PrespaEvents\PrespaEvents\PrespaEvents.Web\bin\Debug\netcoreapp3.1\Stripe.net.dll

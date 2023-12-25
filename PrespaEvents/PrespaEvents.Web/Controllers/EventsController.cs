@@ -63,6 +63,7 @@ namespace PrespaEvents.Web.Controllers
             return View(viewModel);
         }
 
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> AddEventToCard(Guid? id)
         {
             var events = await _context.Events.Where(z => z.Id.Equals(id)).FirstOrDefaultAsync();
@@ -78,6 +79,7 @@ namespace PrespaEvents.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> AddEventToCard([Bind("EventId", "Quantity")] AddToShoppingCardDto item)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -109,6 +111,7 @@ namespace PrespaEvents.Web.Controllers
         }
 
         // GET: Events/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -126,7 +129,7 @@ namespace PrespaEvents.Web.Controllers
             return View(@event);
         }
 
-        [Authorize(Roles = "Organizer")]
+        [Authorize(Roles = "Organizer, Admin")]
         // GET: Events/Create
         public IActionResult Create()
         {
@@ -140,7 +143,7 @@ namespace PrespaEvents.Web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Organizer")]
+        [Authorize(Roles = "Organizer, Admin")]
         public async Task<IActionResult> Create([Bind("Id,EventName,EventImage,EventDescription,EventPrice,EventDate, CategoryId")] Event @event)
         {
             if (ModelState.IsValid)
@@ -161,6 +164,7 @@ namespace PrespaEvents.Web.Controllers
         }
 
         // GET: Events/Edit/5
+        [Authorize(Roles = "Organizer, Admin")]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -183,6 +187,7 @@ namespace PrespaEvents.Web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Organizer, Admin")]
         public async Task<IActionResult> Edit(Guid Id, [Bind("Id,EventName,EventImage,EventDescription,EventPrice, EventDate, CategoryId")] Event @event)
         {
             if (Id != @event.Id)
@@ -224,6 +229,7 @@ namespace PrespaEvents.Web.Controllers
         }
 
         // GET: Events/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -244,6 +250,7 @@ namespace PrespaEvents.Web.Controllers
         // POST: Events/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var @event = await _context.Events.FindAsync(id);
