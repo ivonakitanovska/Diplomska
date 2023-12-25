@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<PrespaEvents.Web.Models.Domain.Event>
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -9,17 +10,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@ViewData["Title"]</title>
 
-  
+
     <!-- Add custom styles for background image -->
     <style>
-    
+
 
         .jumbotron {
             background: none; /* Make the jumbotron background transparent */
         }
 
+        .card {
+            transition: transform 0.2s;
+            color:black;
+        }
+
+            .card:hover {
+                cursor: pointer;
+                transform: scale(1.05);
+            }
         /* Add more styles as needed for other elements */
     </style>
+
+    <script>
+        function hoverCard(element) {
+            element.style.transform = "scale(1.05)";
+        }
+
+        function unhoverCard(element) {
+            element.style.transform = "scale(1)";
+        }
+    </script>
 </head>
 <body>
 
@@ -57,34 +77,41 @@
             <div class="row">
 
                 <!-- Prva -->
-                <div class="col-4">
-                    <div class="card" style="height: 100%;">
-                        <img class="card-img-top" src="~/images/prespa_cover.jpg" style="height:50%" />
-                        <div class="card-body">
-                            <h5 class="card-title">EventName</h5>
-                        </div>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    var item = Model[i];
+
+                    <div class="col-4">
+                        <a style="text-decoration:none;" href="@Url.Action("Index", "Events")">
+                            <div class="card" style="height: 90%;" onmouseover="hoverCard(this)" onmouseout="unhoverCard(this)">
+                                <img class="card-img-top" src="@item.EventImage" style="height:70%" />
+                                <div class="card-body">
+                                    <h5 style="text-decoration:none;" class="card-title">@item.EventName</h5>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                </div>
+
+                }
 
                 <!-- Vtora -->
-                <div class="col-4">
-                    <div class="card" style="height: 100%;">
-                        <img class="card-img-top" src="~/images/prespa_cover.jpg" style="height:50%" />
-                        <div class="card-body">
-                            <h5 class="card-title">EventName</h5>
-                        </div>
-                    </div>
-                </div>
-
+                <!--<div class="col-4">
+        <div class="card" style="height: 100%;">
+            <img class="card-img-top" src="~/images/prespa_cover.jpg" style="height:50%" />
+            <div class="card-body">
+                <h5 class="card-title">EventName</h5>
+            </div>
+        </div>
+    </div>-->
                 <!-- Treta -->
-                <div class="col-4">
-                    <div class="card" style="height: 100%;">
-                        <img class="card-img-top" src="~/images/prespa_cover.jpg" style="height:50%" />
-                        <div class="card-body">
-                            <h5 class="card-title">EventName</h5>
-                        </div>
-                    </div>
-                </div>
+                <!--<div class="col-4">
+        <div class="card" style="height: 100%;">
+            <img class="card-img-top" src="~/images/prespa_cover.jpg" style="height:50%" />
+            <div class="card-body">
+                <h5 class="card-title">EventName</h5>
+            </div>
+        </div>
+    </div>-->
 
             </div>
 
@@ -95,3 +122,5 @@
 
 </body>
 </html>
+
+

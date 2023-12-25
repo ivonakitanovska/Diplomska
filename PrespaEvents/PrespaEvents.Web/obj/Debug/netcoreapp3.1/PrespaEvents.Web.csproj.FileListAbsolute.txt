@@ -172,3 +172,8 @@ C:\Users\Dimitar Kitanovski\Desktop\PrespaEvents\PrespaEvents\PrespaEvents.Web\o
 C:\Users\Dimitar Kitanovski\Desktop\PrespaEvents\PrespaEvents\PrespaEvents.Web\obj\Debug\netcoreapp3.1\Razor\Views\Account\Register.cshtml.g.cs
 C:\Users\Dimitar Kitanovski\Desktop\PrespaEvents\PrespaEvents\PrespaEvents.Web\obj\Debug\netcoreapp3.1\Razor\Views\Events\AddEventToCard.cshtml.g.cs
 C:\Users\Dimitar Kitanovski\Desktop\PrespaEvents\PrespaEvents\PrespaEvents.Web\obj\Debug\netcoreapp3.1\Razor\Views\Cart\Index.cshtml.g.cs
+C:\Users\Dimitar Kitanovski\Desktop\PrespaEvents\PrespaEvents\PrespaEvents.Web\obj\Debug\netcoreapp3.1\Razor\Views\Categories\Create.cshtml.g.cs
+C:\Users\Dimitar Kitanovski\Desktop\PrespaEvents\PrespaEvents\PrespaEvents.Web\obj\Debug\netcoreapp3.1\Razor\Views\Categories\Delete.cshtml.g.cs
+C:\Users\Dimitar Kitanovski\Desktop\PrespaEvents\PrespaEvents\PrespaEvents.Web\obj\Debug\netcoreapp3.1\Razor\Views\Categories\Details.cshtml.g.cs
+C:\Users\Dimitar Kitanovski\Desktop\PrespaEvents\PrespaEvents\PrespaEvents.Web\obj\Debug\netcoreapp3.1\Razor\Views\Categories\Edit.cshtml.g.cs
+C:\Users\Dimitar Kitanovski\Desktop\PrespaEvents\PrespaEvents\PrespaEvents.Web\obj\Debug\netcoreapp3.1\Razor\Views\Categories\Index.cshtml.g.cs

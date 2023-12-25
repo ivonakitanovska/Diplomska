@@ -73,7 +73,21 @@ namespace PrespaEvents.Web.Data
                 .WithMany(e => e.MyEvents)
                 .HasForeignKey(e => e.OrganizerId)
                 .IsRequired();
+
+            builder.Entity<Category>()
+                .HasMany(e => e.Events)
+                .WithOne(e => e.EventCategory)
+                .HasForeignKey(e => e.CategoryId)
+                .IsRequired();
+            builder.Entity<Event>()
+               .HasOne(e => e.EventCategory)
+               .WithMany(e => e.Events)
+               .HasForeignKey(e => e.CategoryId)
+               .IsRequired();
         }
+
+
+        public DbSet<PrespaEvents.Web.Models.Domain.Category> Category { get; set; }
 
     }
 }

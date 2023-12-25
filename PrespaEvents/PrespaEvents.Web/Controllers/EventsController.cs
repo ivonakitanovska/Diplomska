@@ -25,9 +25,42 @@ namespace PrespaEvents.Web.Controllers
         }
 
         // GET: Events
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index()
+        //{
+        //    var all_events = await _context.Events.ToListAsync();
+        //    foreach (var item in all_events)
+        //    {
+        //        item.EventDescription = item.EventDescription.Substring(0, 30) + "...";
+        //    }
+        //    return View(all_events);
+        //}
+
+        public async Task<IActionResult> Index(Guid? selectedCategoryId)
         {
-            return View(await _context.Events.ToListAsync());
+            IQueryable<Event> eventsQuery = _context.Events;
+
+            if (selectedCategoryId.HasValue)
+            {
+                eventsQuery = eventsQuery.Where(e => e.CategoryId == selectedCategoryId.Value);
+            }
+
+            var events = await eventsQuery.ToListAsync();
+
+            foreach (var item in events)
+            {
+                item.EventDescription = item.EventDescription.Substring(0, 30) + "...";
+            }
+
+            var categories = await _context.Category.ToListAsync();
+
+            var viewModel = new CategoryEventsViewModel
+            {
+                SelectedCategoryId = selectedCategoryId,
+                Events = events,
+                Categories = new SelectList(categories, "Id", "Name")
+            };
+
+            return View(viewModel);
         }
 
         public async Task<IActionResult> AddEventToCard(Guid? id)
@@ -97,6 +130,8 @@ namespace PrespaEvents.Web.Controllers
         // GET: Events/Create
         public IActionResult Create()
         {
+            var categories = _context.Category.ToList();
+            ViewBag.Categories = new SelectList(categories, "Id", "Name");
             return View();
         }
 
@@ -106,19 +141,22 @@ namespace PrespaEvents.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Organizer")]
-        public async Task<IActionResult> Create([Bind("Id,EventName,EventImage,EventDescription,EventPrice,EventDate")] Event @event)
+        public async Task<IActionResult> Create([Bind("Id,EventName,EventImage,EventDescription,EventPrice,EventDate, CategoryId")] Event @event)
         {
             if (ModelState.IsValid)
             {
                 var organizerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var organizer = _context.Users.Where(z => z.Id.Equals(organizerId)).FirstOrDefault();
+                var categoty = _context.Category.Where(z => z.Id.Equals(@event.CategoryId)).FirstOrDefault();
                 @event.Id = Guid.NewGuid();
                 @event.Organizer = organizer;
                 @event.OrganizerId = organizerId;
+                @event.EventCategory = categoty;
                 _context.Add(@event);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewBag.Categories = new SelectList(_context.Category, "CategoryId", "CategoryName", @event.CategoryId);
             return View(@event);
         }
 
@@ -135,6 +173,8 @@ namespace PrespaEvents.Web.Controllers
             {
                 return NotFound();
             }
+            var categories = _context.Category.ToList();
+            ViewBag.Categories = new SelectList(categories, "Id", "Name");
             return View(@event);
         }
 
@@ -143,7 +183,7 @@ namespace PrespaEvents.Web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid Id, [Bind("Id,EventName,EventImage,EventDescription,EventPrice, EventDate")] Event @event)
+        public async Task<IActionResult> Edit(Guid Id, [Bind("Id,EventName,EventImage,EventDescription,EventPrice, EventDate, CategoryId")] Event @event)
         {
             if (Id != @event.Id)
             {
@@ -154,6 +194,7 @@ namespace PrespaEvents.Web.Controllers
             {
                 try
                 {
+                    var categoty = _context.Category.Where(z => z.Id.Equals(@event.CategoryId)).FirstOrDefault();
                     //TODO: Add date and other columns to update
                     var event_to_update = _context.Events.Where(z => z.Id == Id).FirstOrDefault();
                     event_to_update.EventName = @event.EventName;
@@ -161,6 +202,8 @@ namespace PrespaEvents.Web.Controllers
                     event_to_update.EventDescription = @event.EventDescription;
                     event_to_update.EventPrice = @event.EventPrice;
                     event_to_update.EventDate = @event.EventDate;
+                    event_to_update.CategoryId = categoty.Id;
+                    event_to_update.EventCategory = categoty;
                     _context.Update(event_to_update);
                     await _context.SaveChangesAsync();
                 }
