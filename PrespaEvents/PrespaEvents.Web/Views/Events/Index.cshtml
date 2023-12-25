@@ -6,36 +6,25 @@
 }
 
 <style>
-    .card-text {
-        max-height: 6rem; /* Ограничете ја висината на текстот на 6 реда */
-        overflow: hidden;
-    }
-
-    .card-text.expandable {
-        max-height: none; /* Кога ќе се прошири, нема ограничување на висината */
-    }
-
-    .card-text.expandable p {
-        margin: 0; /* Избегнете додавање на маргини на параграфите во проширениот текст */
-    }
-    
-
     .card {
-        width: 18rem;
-        height: 30rem;
+        /*background-color: cornflowerblue;*/
+        /*opacity: 0.7;*/
+        width: 20rem;
+        height: 100%;
+        margin-bottom: 20px;
+        border: 1px solid gray;
+        border-radius:5px;
     }
 
-    .card-footer {
-        display: inline-block;
-        flex-direction: row;
-    }
+
+   
 </style>
-
-
 
 <div class="container">
     <div class="m-3">
-        <a class="btn btn-success" asp-controller="Events" asp-action="Create">Add new Event</a>
+        <a class="btn btn-outline-primary" asp-controller="Events" asp-action="Create"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+</svg> Add new Event</a>
     </div>
 
     @for (int i = 0; i < Model.Count; i++)
@@ -47,20 +36,34 @@
             @:<div class="row">
             }
 
-            <div class="col-md-3 m-4">
+            <div class="col-md-4 mb-4">
                 <div class="card">
-                    <img class="card-img-top" src="@item.EventImage" style="height:30%" alt="Image for event!" />
+                    <img class="card-img-top" src="@item.EventImage" alt="Image for event!" />
                     <div class="card-body">
                         <h5 class="card-title">@item.EventName</h5>
                         <p class="card-text">@item.EventDescription</p>
-
+                        <p><i>Date: </i>@item.EventDate</p>
                         <p><i>Price: </i><b>@item.EventPrice Den</b></p>
                     </div>
 
                     <div class="card-footer">
-                        <a asp-controller="Events" asp-action="AddEventToCard" asp-route-id="@item.Id" class="btn btn-info">Add to Card</a>
-                        <a asp-controller="Events" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary">Edit</a>
+                        <a title="Details" asp-controller="Events" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-secondary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
+                            </svg>
+                        </a>
 
+                        <a title="Add to cart" style="float:right; margin-left:10px;" asp-controller="Events" asp-action="AddEventToCard" asp-route-id="@item.Id" class="btn btn-outline-success">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-plus" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5" />
+                                <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z" />
+                            </svg>
+                        </a>
+                        <a title="Edit" style="float:right;" asp-controller="Events" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z" />
+                            </svg>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -69,7 +72,5 @@
             {
             @:</div>
         }
-
     }
-
 </div>

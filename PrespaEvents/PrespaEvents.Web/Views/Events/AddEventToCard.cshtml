@@ -5,27 +5,49 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Add Selected Event to Shopping Card:</h1>
+<style>
+    .my-form {
+        background-color: cornflowerblue;
+        opacity: 0.7;
+        padding: 20px;
+        border-radius: 30px;
+        width: 400px;
+        margin-right: 20px;
+    }
+
+        .my-form button {
+            margin-left: 15px;
+        }
+
+        .my-form .prespa_button {
+            color: white;
+            border: 1px solid white;
+        }
+</style>
+
+<h3 class="text-center">Add Selected Event to Shopping Card:</h3>
 
 <hr />
 
-<div class="row">
-    <div class="col-md-4 m-auto">
-        <form asp-action="AddEventToCard" method="post">
-            <input type="hidden" asp-for="EventId" />
-            <div class="form-group">
-                <label asp-for="SelectedEvent.EventName"></label>
-                <input disabled asp-for="SelectedEvent.EventName" class="form-control" />
-            </div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 mx-auto">
+            <form asp-action="AddEventToCard" method="post" class="my-form">
+                <input type="hidden" asp-for="EventId" />
+                <div class="form-group">
+                    <label asp-for="SelectedEvent.EventName"></label>
+                    <input disabled asp-for="SelectedEvent.EventName" class="form-control" />
+                </div>
 
-            <div class="form-group">
-                <label asp-for="Quantity"></label>
-                <input asp-for="Quantity" class="form-control" />
-            </div>
+                <div class="form-group">
+                    <label asp-for="Quantity"></label>
+                    <input asp-for="Quantity" class="form-control" />
+                </div>
 
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary"/>
-            </div>
-        </form>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
 </div>

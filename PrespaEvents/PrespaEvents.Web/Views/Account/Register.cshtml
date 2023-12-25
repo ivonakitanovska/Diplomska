@@ -1,18 +1,51 @@
 ﻿@model PrespaEvents.Web.Models.Identity.UserRegistrationDto
 @{
-    
     ViewData["Title"] = "Register";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
 }
+<style>
+    form {
+        background-color: cornflowerblue;
+        opacity: 0.7;
+        padding: 20px;
+        border-radius: 30px;
+        width: 400px;
+        margin-right: 20px;
+    }
+    button {
+        margin-left: 15px;
+    }
+
+
+    .prespa_button {
+        color: white;
+        border: 1px solid white;
+    }
+
+    .container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .registerdiv {
+        flex: 1;
+    }
+
+
+    .spacer {
+        width: 20px;
+    }
+
+    
+
+  
+</style>
+
 <div class="container">
-    <h1>Register</h1>
-    @Html.ValidationSummary()
-    <form asp-action="Register" asp-controller="Account" method="post">
-
-        <div class="registerdiv">
-
-
+    <div class="registerdiv">
+        <h1>Register</h1>
+        <form asp-action="Register" asp-controller="Account" method="post">
             <div class="form-group col-sm-12">
                 <label asp-for="@Model.Email" class="col-lg-3 control-label"></label>
                 <br>
@@ -21,7 +54,6 @@
                     @Html.ValidationMessageFor(m => m.Email)
                 </div>
             </div>
-
 
             <div class="form-group col-sm-12">
                 <label asp-for="@Model.Password" class="col-lg-3 control-label"></label>
@@ -43,10 +75,14 @@
 
             <div class="form-group">
                 <div class="col-sm-12 btn-submit">
-                    <button type="submit" class="btn btn-success">Sign Up</button>
-
+                    <button type="submit" class="btn btn-outline-success prespa_button">Sign Up</button>
                 </div>
             </div>
-        </div>
-    </form>
-</div>  
+        </form>
+    </div>
+
+    <!-- Desna strana - Slika -->
+    <div style="margin-left: 20px;">
+        <img src="~/images/prespaevents-high-resolution-logo-transparent.png" alt="Background Image" style="width: 60vh; height: auto; border-radius: 10px;">
+    </div>
+</div>

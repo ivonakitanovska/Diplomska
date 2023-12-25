@@ -62,6 +62,17 @@ namespace PrespaEvents.Web.Data
                .HasOne(z => z.UserOrder)
                .WithMany(t => t.Events)
                .HasForeignKey(z => z.OrderId);
+
+            builder.Entity<EventApplicationUser>()
+                .HasMany(e => e.MyEvents)
+                .WithOne(e => e.Organizer)
+                .HasForeignKey(e => e.OrganizerId)
+                .IsRequired();
+            builder.Entity<Event>()
+                .HasOne(e => e.Organizer)
+                .WithMany(e => e.MyEvents)
+                .HasForeignKey(e => e.OrganizerId)
+                .IsRequired();
         }
 
     }

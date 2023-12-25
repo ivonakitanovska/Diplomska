@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PrespaEvents.Web.Models.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -16,7 +17,11 @@ namespace PrespaEvents.Web.Models.Domain
         [Required]
         public string EventDescription { get; set; }
         [Required]
+        public DateTime EventDate { get; set; }
+        [Required]
         public int EventPrice { get; set; }
+        public string OrganizerId { get; set; }
+        public EventApplicationUser Organizer { get; set; }
         public virtual ICollection<EventInCart> EventInCarts { get; set; }
         public virtual ICollection<EventInOrder> Orders { get; set; }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -92,6 +93,7 @@ namespace PrespaEvents.Web.Controllers
             return View(@event);
         }
 
+        [Authorize(Roles = "Organizer")]
         // GET: Events/Create
         public IActionResult Create()
         {
@@ -103,11 +105,16 @@ namespace PrespaEvents.Web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,EventName,EventImage,EventDescription,EventPrice")] Event @event)
+        [Authorize(Roles = "Organizer")]
+        public async Task<IActionResult> Create([Bind("Id,EventName,EventImage,EventDescription,EventPrice,EventDate")] Event @event)
         {
             if (ModelState.IsValid)
             {
+                var organizerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var organizer = _context.Users.Where(z => z.Id.Equals(organizerId)).FirstOrDefault();
                 @event.Id = Guid.NewGuid();
+                @event.Organizer = organizer;
+                @event.OrganizerId = organizerId;
                 _context.Add(@event);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -136,9 +143,9 @@ namespace PrespaEvents.Web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,EventName,EventImage,EventDescription,EventPrice")] Event @event)
+        public async Task<IActionResult> Edit(Guid Id, [Bind("Id,EventName,EventImage,EventDescription,EventPrice, EventDate")] Event @event)
         {
-            if (id != @event.Id)
+            if (Id != @event.Id)
             {
                 return NotFound();
             }
@@ -147,7 +154,14 @@ namespace PrespaEvents.Web.Controllers
             {
                 try
                 {
-                    _context.Update(@event);
+                    //TODO: Add date and other columns to update
+                    var event_to_update = _context.Events.Where(z => z.Id == Id).FirstOrDefault();
+                    event_to_update.EventName = @event.EventName;
+                    event_to_update.EventImage = @event.EventImage;
+                    event_to_update.EventDescription = @event.EventDescription;
+                    event_to_update.EventPrice = @event.EventPrice;
+                    event_to_update.EventDate = @event.EventDate;
+                    _context.Update(event_to_update);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

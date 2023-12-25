@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PrespaEvents.Web.Data;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace PrespaEvents.Web.Controllers
 {
+    [Authorize]
     public class CartController : Controller
     {
 
@@ -38,7 +40,7 @@ namespace PrespaEvents.Web.Controllers
 
             var userShoppingCart = loggedInUser.UserCart;
 
-            var eventPrice = userShoppingCart.EventInCarts.Select(z => new
+            var eventPrice = userShoppingCart.EventInCarts.Select(z => new 
             {
                 EventPrice = z.Event.EventPrice,
                 Quantity = z.Quantity
